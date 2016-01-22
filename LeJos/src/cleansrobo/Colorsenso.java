@@ -6,7 +6,7 @@ import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.SensorModes;
 import lejos.robotics.SampleProvider;
 
-public class Colorsenso {
+public class Colorsenso extends Thread {
 
 	static float[] csample;
 	SensorModes csensor;
