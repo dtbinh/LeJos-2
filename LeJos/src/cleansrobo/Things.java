@@ -21,10 +21,10 @@ public class Things {
     }
 
     public static void turn() {
-        int x = (int)(Math.random() * 4000 + 2000);
+        int x = (int)(Math.random() * 2000 + 1000);
         //x=x*1000;
         System.out.println(x);
-        if (x>=3000) {
+        if (x>=1500) {
 			leftm.startSynchronization();
 			leftm.forward();
 			rightm.backward();

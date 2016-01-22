@@ -11,27 +11,20 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.subsumption.*;
 
 public class Blocked implements Behavior {
-	static RegulatedMotor leftm; 
-	static RegulatedMotor rightm; 
+
 	private volatile boolean suppressed = false;
-	SensorModes sensor;
+	IRSensor irsenso;
+	Motors motors;
 
-	static float[] dsample;
 
-	public Blocked(SensorModes sensor) {
-		this.sensor = sensor;
+	public Blocked(IRSensor ir, Motors m) {
+		irsenso = ir;
+		motors = m;
 
 	}
 
 	public boolean takeControl() {
-		SampleProvider distProvider = ((EV3IRSensor) sensor).getDistanceMode();
-		dsample = new float[distProvider.sampleSize()];
-		distProvider.fetchSample(dsample, 0);
-
-		if (dsample[0] <= 15) {
-			return true;
-		}
-		return false;
+		return irsenso.checkDistance();
 	}
 
 	public void suppress() {
@@ -39,8 +32,8 @@ public class Blocked implements Behavior {
 	}
 
 	public void action() {
-		Things.stop();
-		Things.turn();
+		motors.backward();
+		motors.turn();
 	}
 
 }
