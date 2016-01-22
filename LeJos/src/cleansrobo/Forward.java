@@ -13,50 +13,49 @@ import lejos.robotics.RegulatedMotor;
 import lejos.robotics.subsumption.*;
 
 public class Forward implements Behavior {
-    static RegulatedMotor leftm = new EV3LargeRegulatedMotor(MotorPort.B);
-    static RegulatedMotor rightm = new EV3LargeRegulatedMotor(MotorPort.C);
-    
-    
+
+	static Motors motors;
+
 	static EV3 ev3 = (EV3) BrickFinder.getLocal();
-    private volatile boolean suppressed = false;
+	private volatile boolean suppressed = false;
 
-    public boolean takeControl() {
-        return true;
-    }
+	public boolean takeControl() {
+		return true;
+	}
 
-    public void suppress() {
-        suppressed = true;
-    }
+	public void suppress() {
+		suppressed = true;
+	}
 
-    public void action() {
-        suppressed = false;
-        leftm.startSynchronization();
+	public void action() {
+		suppressed = false;
+		motors.forward();
 
-        leftm.forward();
-        rightm.forward();
-        leftm.endSynchronization();
+		while (!suppressed)
+			Thread.yield();
+		motors.stop();
 
-        while(!suppressed)Thread.yield();
-            leftm.startSynchronization();
-            leftm.stop();
-            rightm.stop();
-            leftm.endSynchronization();
+	}
 
-    }
-    public static void main(String[] args) {
-    	leftm.synchronizeWith(new RegulatedMotor []{rightm});
-    	 Port port = LocalEV3.get().getPort("S4");
-         SensorModes sensor = new EV3IRSensor(port);
-         Things things = new Things(leftm,rightm);
-          Port port2 = LocalEV3.get().getPort("S1");
-     	 SensorModes csensor = new EV3ColorSensor(port2);
-         
-        Behavior b1 = new Forward();
-        Behavior b2 = new Blocked(sensor);
-        Behavior [] bArray = {b1, b2};
+	public static void main(String[] args) {
+		Colorsenso c = new Colorsenso();
+		IRSensor ir = new IRSensor();
+		motors = new Motors();
+		Buttoni b = new Buttoni();
 
-        Arbitrator arby = new Arbitrator(bArray);
-        arby.go();
-    }
+		Behavior b1 = new Forward();
+		Behavior b2 = new Blocked(ir, motors);
+		Behavior b3 = new OutOfBounds(c, motors);
+		// STOPBEHAVIOR
+		System.out.println("BAINA MUA");
+		while (!b.pressed()) {
+		}
+		System.out.println("thx m8");
+		c.getColor();
+		Behavior[] bArray = { b1, b2, b3 };
+
+		Arbitrator arby = new Arbitrator(bArray);
+		arby.go();
+	}
 
 }
