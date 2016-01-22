@@ -11,6 +11,7 @@ import lejos.hardware.sensor.EV3IRSensor;
 import lejos.hardware.sensor.SensorModes;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.subsumption.*;
+import lejos.utility.Delay;
 
 public class Forward implements Behavior {
 
@@ -46,13 +47,16 @@ public class Forward implements Behavior {
 		Behavior b1 = new Forward();
 		Behavior b2 = new Blocked(ir, motors);
 		Behavior b3 = new OutOfBounds(c, motors);
-		// STOPBEHAVIOR
+		Behavior b4 = new StopBehavior(b,motors);
+
+		//while(true){
 		System.out.println("BAINA MUA");
 		while (!b.pressed()) {
 		}
 		System.out.println("thx m8");
 		c.getColor();
-		Behavior[] bArray = { b1, b2, b3 };
+		Delay.msDelay(2000);
+		Behavior[] bArray = { b1, b2, b3, b4 };
 
 		Arbitrator arby = new Arbitrator(bArray);
 		arby.go();
