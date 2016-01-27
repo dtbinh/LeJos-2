@@ -11,18 +11,22 @@ public class Pilot {
 	final double c = 16.05;
 	RegulatedMotor leftm;
 	RegulatedMotor rightm;
+	DifferentialPilot pilot = null;
 
 	public Pilot() {
 		leftm = new EV3LargeRegulatedMotor(MotorPort.B);
 		rightm = new EV3LargeRegulatedMotor(MotorPort.C);
 		leftm.synchronizeWith(new RegulatedMotor[] { rightm });
-		DifferentialPilot pilot = new DifferentialPilot(d,c,leftm,rightm);
+		pilot= new DifferentialPilot(d,c,leftm,rightm);
 //		pilot.travel(10);
 		//pilot.rotate(360);
 
 
 	}
-	public static void main (String[] args){
-		Pilot pilot = new Pilot();
+	public DifferentialPilot getPilot(){
+		return pilot;
 	}
+//	public static void main (String[] args){
+//		Pilot pilot = new Pilot();
+//	}
 }
