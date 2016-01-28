@@ -25,6 +25,8 @@ public class Naviguy {
 	Pose pose;
 	PoseProvider posi;
 	Navigator n;
+	AstarSearchAlgorithm algo;
+	PathFinder pf;
 
 	public Naviguy(Pilott p) {
 		posi = new OdometryPoseProvider(p.getPilot());
@@ -32,10 +34,6 @@ public class Naviguy {
 		pose = new Pose(0, 0, 90);
 		posi.setPose(pose);
 		n = new Navigator(p.getPilot(), posi);
-	}
-
-	public FourWayGridMesh makeGrid() {
-
 		lines = new Line[3];
 		area = new Rectangle(0, 0, 137, 159);
 		lines[0] = new Line(38, 65, 85, 65);
@@ -44,13 +42,17 @@ public class Naviguy {
 
 		lines[2] = new Line(37, 120, 37, 159);
 		map = new LineMap(lines, area);
-		fwgm = new FourWayGridMesh(map, 10, 10);
+		fwgm = new FourWayGridMesh(map, 10, 5);
+		algo = new AstarSearchAlgorithm();
+	}
+
+	public FourWayGridMesh getGrid() {
 		return fwgm;
 	}
 
-	public Path makePath(FourWayGridMesh fwgm) throws DestinationUnreachableException {
-		AstarSearchAlgorithm algo = new AstarSearchAlgorithm();
-		PathFinder pf = new NodePathFinder(algo, fwgm);
+	public Path getPath(FourWayGridMesh fwgm) throws DestinationUnreachableException {
+
+		 pf= new NodePathFinder(algo, fwgm);
 		switch (waypointNum) {
 		case 1:
 			w = new Waypoint(120, 2);
@@ -60,6 +62,9 @@ public class Naviguy {
 			break;
 		case 3:
 			w = new Waypoint(10, 150);
+			break;
+		case 4:
+			w = new Waypoint(0, 0);
 			break;
 		}
 		Path p = pf.findRoute(posi.getPose(), w);
@@ -72,9 +77,10 @@ public class Naviguy {
 
 	public void start() throws DestinationUnreachableException {
 
-		while (getWaypointNum() <= 3) {
-			n.followPath(makePath(makeGrid()));
+		while (getWaypointNum() <= 4) {
+			n.followPath(getPath(getGrid()));
 			n.waitForStop();
+			waypointNum++;
 		}
 
 	}
