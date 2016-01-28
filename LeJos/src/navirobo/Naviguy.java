@@ -31,18 +31,26 @@ public class Naviguy {
 	public Naviguy(Pilott p) {
 		posi = new OdometryPoseProvider(p.getPilot());
 		/// set position
-		pose = new Pose(0, 0, 90);
+		pose = new Pose(44, 0, 90);
 		posi.setPose(pose);
 		n = new Navigator(p.getPilot(), posi);
-		lines = new Line[3];
-		area = new Rectangle(0, 0, 137, 159);
-		lines[0] = new Line(38, 65, 85, 65);
+		lines = new Line[8];
+		area = new Rectangle(0, 0, 140, 160);
+		// obstacle
+		lines[0] = new Line(38,50, 90, 50);
 
-		lines[1] = new Line(85, 65, 85, 107);
+		lines[1] = new Line(90, 50, 90, 107);
 
-		lines[2] = new Line(37, 120, 37, 159);
+		lines[2] = new Line(30, 120, 30, 160);
+		// rectangle
+		lines[3] = new Line(60, 0, 140, 0);
+		lines[4] = new Line(140, 0, 140, 160);
+		lines[5] = new Line(0, 160, 140, 160);
+		lines[6] = new Line(0, 0, 0, 160);
+		lines[7] = new Line(0,0,35,0);
+
 		map = new LineMap(lines, area);
-		fwgm = new FourWayGridMesh(map, 10, 5);
+		fwgm = new FourWayGridMesh(map, 8, 3);
 		algo = new AstarSearchAlgorithm();
 	}
 
@@ -52,19 +60,19 @@ public class Naviguy {
 
 	public Path getPath(FourWayGridMesh fwgm) throws DestinationUnreachableException {
 
-		 pf= new NodePathFinder(algo, fwgm);
+		pf = new NodePathFinder(algo, fwgm);
 		switch (waypointNum) {
 		case 1:
-			w = new Waypoint(120, 2);
+			w = new Waypoint(120, 7);
 			break;
 		case 2:
-			w = new Waypoint(70, 80);
+			w = new Waypoint(65, 80);
 			break;
 		case 3:
-			w = new Waypoint(10, 150);
+			w = new Waypoint(17, 140);
 			break;
 		case 4:
-			w = new Waypoint(0, 0);
+			w = new Waypoint(44, 5);
 			break;
 		}
 		Path p = pf.findRoute(posi.getPose(), w);
