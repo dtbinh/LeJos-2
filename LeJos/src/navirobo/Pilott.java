@@ -6,14 +6,14 @@ import lejos.robotics.RegulatedMotor;
 import lejos.robotics.navigation.DifferentialPilot;
 
 @SuppressWarnings("deprecation")
-public class Pilot {
+public class Pilott {
 	final double d = 2.9;
 	final double c = 16.05;
 	RegulatedMotor leftm;
 	RegulatedMotor rightm;
 	DifferentialPilot pilot = null;
 
-	public Pilot() {
+	public Pilott() {
 		leftm = new EV3LargeRegulatedMotor(MotorPort.B);
 		rightm = new EV3LargeRegulatedMotor(MotorPort.C);
 		leftm.synchronizeWith(new RegulatedMotor[] { rightm });

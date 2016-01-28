@@ -11,7 +11,7 @@ public class Colorsenso extends Thread {
 	static float[] csample;
 	SensorModes csensor;
 	Port port2;
-	private int r2, g2, b2, r, g, b,range = 20;
+	private int r2, g2, b2, r, g, b,range = 25;
 	private boolean first = true;
 
 	public Colorsenso() {
