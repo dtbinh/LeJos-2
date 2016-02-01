@@ -10,6 +10,10 @@ import lejos.robotics.pathfinding.FourWayGridMesh;
 import lejos.robotics.pathfinding.NodePathFinder;
 import lejos.robotics.pathfinding.Path;
 import lejos.robotics.pathfinding.*;
+
+import java.io.IOException;
+import java.net.Socket;
+
 import lejos.robotics.geometry.*;
 import lejos.robotics.localization.OdometryPoseProvider;
 import lejos.robotics.localization.PoseProvider;
@@ -27,6 +31,8 @@ public class Naviguy {
 	Navigator n;
 	AstarSearchAlgorithm algo;
 	PathFinder pf;
+	EV3End ev3End;
+	Datatransfer dt;
 
 	public Naviguy(Pilott p) {
 		posi = new OdometryPoseProvider(p.getPilot());
@@ -37,7 +43,7 @@ public class Naviguy {
 		lines = new Line[8];
 		area = new Rectangle(0, 0, 140, 160);
 		// obstacle
-		lines[0] = new Line(38,50, 90, 50);
+		lines[0] = new Line(38, 50, 90, 50);
 
 		lines[1] = new Line(90, 50, 90, 107);
 
@@ -47,7 +53,7 @@ public class Naviguy {
 		lines[4] = new Line(140, 0, 140, 160);
 		lines[5] = new Line(0, 160, 140, 160);
 		lines[6] = new Line(0, 0, 0, 160);
-		lines[7] = new Line(0,0,35,0);
+		lines[7] = new Line(0, 0, 35, 0);
 
 		map = new LineMap(lines, area);
 		fwgm = new FourWayGridMesh(map, 8, 3);
@@ -83,13 +89,23 @@ public class Naviguy {
 		return waypointNum;
 	}
 
-	public void start() throws DestinationUnreachableException {
+	public void start() throws DestinationUnreachableException, IOException, InterruptedException {
+		ev3End = new EV3End();
+
+
 
 		while (getWaypointNum() <= 4) {
 			n.followPath(getPath(getGrid()));
+			ev3End.setStringi("sasd");
 			n.waitForStop();
+
+			ev3End.setStringi("Waypoint "+getWaypointNum()+ " reached");
+			//Datatransfer.setString("Waypoint "+getWaypointNum()+ " reached");
+
+
 			waypointNum++;
 		}
+		ev3End.setStringi("stopperino");
 
 	}
 }
