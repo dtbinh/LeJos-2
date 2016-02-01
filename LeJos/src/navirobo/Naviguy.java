@@ -91,21 +91,24 @@ public class Naviguy {
 
 	public void start() throws DestinationUnreachableException, IOException, InterruptedException {
 		ev3End = new EV3End();
-
-
-
+		
 		while (getWaypointNum() <= 4) {
+			
+			
 			n.followPath(getPath(getGrid()));
 			ev3End.setStringi("sasd");
 			n.waitForStop();
 
-			ev3End.setStringi("Waypoint "+getWaypointNum()+ " reached");
+			ev3End.setStringi("Waypoint "+getWaypointNum()+ " reached "+w.getX()+","+w.getY());
 			//Datatransfer.setString("Waypoint "+getWaypointNum()+ " reached");
 
 
 			waypointNum++;
 		}
+		
 		ev3End.setStringi("stopperino");
+		
+
 
 	}
 }
