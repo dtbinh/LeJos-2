@@ -23,16 +23,14 @@ public class EV3End {
 		dt.start();
 	}
 
-	public Socket getSocket() {
-		return s2;
-	}
+//	public Socket getSocket() {
+//		return s2;
+//	}
 
 	public void setStringi(String str) {
 		dt.setString(str);
 	}
 
-	// public static void main(String[] args) throws IOException {
-	// EV3End end = new EV3End();
-	// }
+
 
 }
